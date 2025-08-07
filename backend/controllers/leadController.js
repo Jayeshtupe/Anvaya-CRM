@@ -11,13 +11,26 @@ exports.createLead = async (req, res) => {
 
 exports.getLeads = async(req, res) => {
     try {
-        const lead = await Lead.find()
+        const { status, salesAgent, source, tags, priority } = req.query
+
+        const filter = {}
+
+        if(status) filter.status = status
+        if(salesAgent) filter.salesAgent = salesAgent
+        if(source) filter.source = source
+        if(priority) filter.priority = priority
+        if(tags) {
+            const tagList = tags.split(",").map((tag) => tag.trim())
+            filter.tags = { $in: tagList }
+        }
+        
+        const leads = await Lead.find(filter)
         .populate("salesAgent", "name email")
         .populate("tags", "name")
-        if(!lead) {
-            res.status(404).json({message: "Lead not found"})
+        if(!leads || leads.length === 0) {
+            res.status(404).json({message: "No leads found."})
         }
-        res.json(lead)
+        res.status(200).json(leads)
     } catch (error) {
         res.status(500).json({message: error.message})
     }
