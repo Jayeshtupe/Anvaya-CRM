@@ -1,0 +1,11 @@
+.lead-pill {
+  transition: all 0.3s ease;
+  background-color: #f8f9fa; 
+}
+
+.lead-pill:hover {
+  background-color: #343a40; 
+  color: white !important;     
+  transform: translateY(-2px); 
+
+}
