@@ -86,10 +86,10 @@ const handleDelete = async (id) => {
             <label className="form-label">Source:</label>
             <select value={filters.source} onChange={handleChange} className="form-select" name="source">
               <option value="">All Source</option>
-              <option value="Advertisement">New</option>
-              <option value="Website">Contacted</option>
+              <option value="Advertisement">Website</option>
+              <option value="Website">Referral</option>
                <option value="Cold Call">Cold Call</option>
-              <option value="Referral">Qualified</option>
+              <option value="Referral">Advertisement</option>
             </select>
           </div>
           
