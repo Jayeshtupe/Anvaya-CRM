@@ -8,14 +8,24 @@ const SalesAgentOverview = () => {
     
     const filteredLeads = leads.filter((lead) => lead.salesAgent._id === id)
 
+    if (filteredLeads.length === 0) {
+    return (
+      <div className="container mt-3">
+        <h4 className="my-3 text-center fw-bold">
+          Lead Handle by Agent: <span className="badge bg-secondary">Unknown</span>
+        </h4>
+        <p className="alert alert-warning">
+          No leads assigned to this agent
+        </p>
+      </div>
+    );
+  }
+
     const agent = filteredLeads[0].salesAgent
    
      return (
         <div className="container mt-3">
             <h4 className="my-3 text-center fw-bold">Lead Handle by Agent: <span className="badge bg-secondary">{agent.name}</span></h4>
-           {filteredLeads.length === 0 ? (
-            <p className="alert alert-warning">No leads assigned to this agent</p>
-           ) : (
              <div className="card">
                 <div className="card-header fw-bold">
                    Agent: {agent.name}
@@ -37,7 +47,7 @@ const SalesAgentOverview = () => {
         </div>
 
             </div>
-           )}
+           
             
         </div>
     )

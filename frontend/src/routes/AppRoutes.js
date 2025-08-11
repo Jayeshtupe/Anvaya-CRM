@@ -8,6 +8,7 @@ import LeadsStatusOverview from "../pages/LeadsStatusOverview"
 import SalesAgent from "../pages/SalesAgent";
 import SalesAgentOverview from "../pages/SalesAgentOverview";
 import Reports from "../pages/Reports";
+import Setting from "../pages/Setting";
 
 
 const router = createBrowserRouter([
@@ -28,8 +29,8 @@ const router = createBrowserRouter([
                 element: <LeadForm/>
             },
             {
-                path: 'leadDetails/:id',
-                element: <LeadDetails/>
+                path: 'leadform/:id',
+                element: <LeadForm />
             },
             {
                 path: 'leads/:id',
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
                 path: 'reports',
                 element: <Reports/>
             },
+            {
+                path: 'settings',
+                element: <Setting/>
+            }
         ]
     }
 ])

@@ -129,7 +129,6 @@ const handleDelete = async (id) => {
 
 </div>
 
-
         </div>
       </div>
 

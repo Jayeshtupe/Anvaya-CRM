@@ -33,7 +33,7 @@ const Dashboard = () => {
       key={lead._id}
       className="px-3 py-2 rounded-pill border text-secondary border border-dark lead-pill"
       style={{ cursor: "pointer" }}
-      onClick={() => navigate(`/leadDetails/${lead._id}`)}
+      onClick={() => navigate(`/leads/${lead._id}`)}
     >
       {lead.name}
     </div>

@@ -1,81 +1,85 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useLeads from "../context/LeadContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function useLeadForm(isEdit = false, editingLead = null, leadId = null) {
-  const navigate = useNavigate();
-  const { addLead, editLead } = useLeads();
-
+const useLeadForm = (editing = false, id = null) => {
+  const { addLead, editLead, getTags, tags } = useLeads();
   const [formData, setFormData] = useState({
-    name: editingLead?.name || "",
-    source: editingLead?.source || "",
-    salesAgent: editingLead?.salesAgent || "",
-    status: editingLead?.status || "",
-    tags: editingLead?.tags || [],
-    timeToClose: editingLead?.timeToClose || "",
-    priority: editingLead?.priority || "",
+    name: "",
+    source: "",
+    status: "",
+    salesAgent: "",
+    tags: [],
+    timeToClose: "",
+    priority: "",
   });
-
   const [agents, setAgents] = useState([]);
-  const [tags, setTags] = useState([]);
+  const navigate = useNavigate();
 
-  // Fetch sales agents and tags when component mounts
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const agentRes = await fetch("https://anvaya-crm-lyart.vercel.app/agents");
-        const tagRes = await fetch("https://anvaya-crm-lyart.vercel.app/tags");
+    getTags();
+    fetchAgents();
 
-        const agentsData = await agentRes.json();
-        const tagsData = await tagRes.json();
+    if (editing && id) {
+      fetchLeadById(id);
+    }
+  }, [editing, id]);
 
-        setAgents(agentsData);
-        setTags(tagsData);
-      } catch (err) {
-        console.error("Error loading agents or tags", err);
-      }
-    };
-    fetchData();
-  }, []);
+  const fetchAgents = async () => {
+    try {
+      const res = await axios.get("https://anvaya-crm-lyart.vercel.app/agents");
+      setAgents(res.data);
+    } catch (err) {
+      console.error("Error loading agents", err);
+    }
+  };
+
+  const fetchLeadById = async (id) => {
+    try {
+      const res = await axios.get(`https://anvaya-crm-lyart.vercel.app/leads/${id}`);
+      const lead = res.data;
+
+      setFormData({
+        name: lead.name || "",
+        source: lead.source || "",
+        status: lead.status || "",
+        salesAgent: lead.salesAgent?._id || "",
+        tags: lead.tags || [],
+        timeToClose: lead.timeToClose || "",
+        priority: lead.priority || "",
+      });
+    } catch (err) {
+      console.error("Error fetching lead", err);
+    }
+  };
 
   const inputHandler = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (name === "tags" && type === "checkbox") {
-      setFormData((prev) => ({
-        ...prev,
-        tags: checked
-          ? [...prev.tags, value]
-          : prev.tags.filter((t) => t !== value),
-      }));
+    if (name === "tags") {
+      let updatedTags = [...formData.tags];
+      if (checked) {
+        updatedTags.push(value);
+      } else {
+        updatedTags = updatedTags.filter((tag) => tag !== value);
+      }
+      setFormData((prev) => ({ ...prev, tags: updatedTags }));
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (formData.tags.length === 0) {
-      alert("Please select at least one tag.");
-      return;
+    if (editing && id) {
+      await editLead(id, formData);
+    } else {
+      await addLead(formData);
     }
 
-    try {
-      if (isEdit && leadId) {
-        await editLead(leadId, formData);
-        navigate(`/leads/${leadId}`);
-      } else {
-        await addLead(formData);
-        navigate("/leads");
-      }
-    } catch (error) {
-      alert("An error occurred while saving the lead.");
-      console.error(error);
-    }
+    navigate("/leads");
   };
 
   return {
@@ -85,4 +89,6 @@ export default function useLeadForm(isEdit = false, editingLead = null, leadId =
     agents,
     tags,
   };
-}
+};
+
+export default useLeadForm;

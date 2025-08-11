@@ -92,7 +92,7 @@ const handleDelete = async (id, commentId) => {
           <p><strong>Priority:</strong> {lead.priority}</p>
           <p><strong>Time to Close:</strong> {lead.timeToClose} Days</p>
 
-          <button className="btn btn-sm btn-outline-primary my-2" onClick={() => navigate('/leadform')}>
+          <button className="btn btn-sm btn-outline-primary my-2" onClick={() => navigate(`/leadform/${id}`)}>
             Edit Lead
           </button>
 

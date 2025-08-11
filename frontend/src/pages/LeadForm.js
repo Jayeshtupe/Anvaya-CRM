@@ -1,16 +1,20 @@
 import useLeadForm from "../hooks/useLeadForm";
+import { useParams } from "react-router-dom"
+import { useEffect } from "react";
 
-const LeadForm = ({ isEditLead = false }) => {
-  const { formData, inputHandler, submitHandler, agents, tags } = useLeadForm(isEditLead);
-
+const LeadForm = () => {
+  const { id } = useParams()
+  const editing = Boolean(id)
+  const { formData, inputHandler, submitHandler, agents, tags } = useLeadForm(editing, id);
+  
   return (
     <div className="container my-3">
-      <h2 className="mb-4">{isEditLead ? "Edit Lead Details" : "Create New Lead"}</h2>
+      <h2 className="mb-4">{editing ? "Edit Lead Details" : "Create New Lead"}</h2>
     
         <div className="row">
           <div className="col">
             <form onSubmit={submitHandler} className="card shadow-sm p-4">
-              <h5 className="mb-4">{isEditLead ? "Edit Lead" : "New Lead Entry"}</h5>
+              <h5 className="mb-4">{editing ? "Edit Lead" : "New Lead Entry"}</h5>
 
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">Lead Name</label>
@@ -79,7 +83,7 @@ const LeadForm = ({ isEditLead = false }) => {
                   <option value="Qualified">Qualified</option>
                   <option value="Proposal Sent">Proposal Sent</option>
                   <option value="Closed">Closed</option>
-                  {isEditLead && <option value="Closed">Closed</option>}
+                  {editing && <option value="Closed">Closed</option>}
                 </select>
               </div>
 
@@ -138,7 +142,7 @@ const LeadForm = ({ isEditLead = false }) => {
               </div>
 
               <button type="submit" className="btn btn-primary">
-                {isEditLead ? "Update Lead" : "Add Lead"}
+                {editing? "Update Lead" : "Add Lead"}
               </button>
             </form>
           </div>

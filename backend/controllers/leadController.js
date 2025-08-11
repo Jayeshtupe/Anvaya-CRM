@@ -40,7 +40,7 @@ exports.updateLead = async(req, res) => {
     try{
         const lead = await Lead.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
-            runvalidators: true
+            runValidators: true
         }).populate("salesAgent", "name email")
 
         if(!lead) {
@@ -52,6 +52,18 @@ exports.updateLead = async(req, res) => {
         res.status(500).json({message: error.message})
     }
 }
+
+exports.getLeadById = async (req, res) => {
+  try {
+    const lead = await Lead.findById(req.params.id)
+      .populate("salesAgent", "name email");
+    if (!lead) return res.status(404).json({ message: "Lead not found" });
+    res.json(lead);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 exports.deleteLead = async (req, res) => {
     try{

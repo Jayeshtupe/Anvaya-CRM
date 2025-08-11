@@ -38,6 +38,18 @@ export const LeadProvider = ({ children }) => {
     }
   }
 
+  const getLeadById = async (id) => {
+    setLoading(true)
+  try {
+    const res = await axios.get(`${url}/leads/${id}`);
+    return res.data;
+  } catch (error) {
+    setError(error.message);
+  } finally {
+    setLoading(false)
+  }
+};
+
   const getTags = async (query = "") => {
     setLoading(true)
     try{
@@ -66,7 +78,7 @@ export const LeadProvider = ({ children }) => {
     const editLead = async (id, data) => {
     setLoading(true);
     try {
-      const res = await axios.put(`${url}/leads/${id}`, data);
+      const res = await axios.patch(`${url}/leads/${id}`, data);
       setMessage(res.data.message || "Lead updated");
       getLeads(); 
     } catch (err) {
@@ -90,7 +102,7 @@ export const LeadProvider = ({ children }) => {
   }
 
  return (
-    <LeadContext.Provider value={{leads, getLeads, addLead, editLead, deleteLead, getTags, tags, loading, error, message}}>
+    <LeadContext.Provider value={{leads, getLeads, getLeadById, addLead, editLead, deleteLead, getTags, tags, loading, error, message}}>
         {children}
     </LeadContext.Provider>
  )

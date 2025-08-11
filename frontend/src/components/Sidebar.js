@@ -1,7 +1,7 @@
 import { useSidebar } from "../context/SidebarContext";
 import { Link } from "react-router-dom";
 import { FaAddressCard, FaTachometerAlt, FaUsers, FaChartBar, FaHome } from 'react-icons/fa';
-import { IoReturnDownBackOutline } from "react-icons/io5";
+import { IoReturnDownBackOutline, IoSettingsOutline } from "react-icons/io5";
 import { useLocation } from "react-router-dom";
 const Sidebar = () => {
   const { isSidebarOpen } = useSidebar();
@@ -30,6 +30,11 @@ const Sidebar = () => {
         <li className="nav-item">
          <Link to="/reports" className="nav-link text-white d-flex align-items-center gap-2">
             <FaChartBar /> Reports
+          </Link>
+        </li>
+        <li className="nav-item">
+         <Link to="/settings" className="nav-link text-white d-flex align-items-center gap-2">
+            <IoSettingsOutline /> Settings
           </Link>
         </li>
           </>
